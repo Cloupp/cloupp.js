@@ -1,0 +1,12 @@
+{
+	"name"            : "cloupp.js",
+	"version"         : "0.1.0",
+	"author"          : "Cloupp <hello@cloupp.com>",
+	"main"            : "lib/cloupp.min.js",
+	"devDependencies" : {
+		"socket.io-client" : "0.9.x",
+		"browserify"       : "2.17.x",
+		"coffeeify"        : "0.4.x",
+		"uglify-js"        : "2.3.x"
+	}
+}
