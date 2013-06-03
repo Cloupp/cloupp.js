@@ -1,6 +1,6 @@
 {
 	"name"            : "cloupp.js",
-	"version"         : "0.1.0",
+	"version"         : "0.1.1",
 	"author"          : "Cloupp <hello@cloupp.com>",
 	"main"            : "lib/cloupp.min.js",
 	"devDependencies" : {

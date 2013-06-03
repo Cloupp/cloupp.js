@@ -1,6 +1,6 @@
 io             = require 'socket.io-client'
 
-HOST           = "http://api.cloupp.com"
+HOST           = "http://api.cloupp.com:80"
 VERSION        = "v1"
 ENDPOINT       = "#{HOST}"
 
@@ -12,11 +12,9 @@ class File
 		@update content
 
 	update: (content) ->
-		@content = content
-
 		@socket.emit 'update',
 			path: @name
-			data: @content
+			data: content
 
 class Session
 	constructor: (@socket) ->
