@@ -26,12 +26,18 @@ class Session
 		@socket.emit 'compile'
 		promise = new $.Deferred
 
+		handler = (data) ->
+			promise.notify data.progress
+
 		@socket.once 'compiled', (data) ->
+			@socket.removeListener 'progress', handler
+			
 			if data.id
 				promise.resolve data
 			else
 				promise.reject data
 
+		@socket.on 'progress', handler
 		promise.promise()
 
 class Cloupp
