@@ -1,6 +1,6 @@
 io             = require 'socket.io-client'
 
-HOST           = "http://api.cloupp.com:80"
+HOST           = "https://warm-garden-2837.herokuapp.com:80"
 VERSION        = "v1"
 ENDPOINT       = "#{HOST}"
 
