@@ -22,8 +22,11 @@ class Session
 	createFile: (name, content) ->
 		new File @socket, name, content
 
-	compile: () ->
-		@socket.emit 'compile'
+	compile: (name, description) ->
+		@socket.emit 'compile',
+			name:        name
+			description: description
+
 		promise = new $.Deferred
 
 		handler = (data) ->
