@@ -1,18 +1,11 @@
-io             = require 'socket.io-client'
-
-HOST           = "https://warm-garden-2837.herokuapp.com:443"
-VERSION        = "v1"
-ENDPOINT       = "#{HOST}"
-
-SOCKET_IO_RES  = "#{VERSION}/socket.io"
-SOCKET_IO_EP   = "#{HOST}/api"
+URL = "https://warm-garden-2837.herokuapp.com:443/v1/socket"
 
 class File
 	constructor: (@socket, @name, content) ->
 		@update content
 
 	update: (content) ->
-		@socket.emit 'update',
+		@socket.send 'update',
 			path: @name
 			data: content
 
@@ -23,7 +16,7 @@ class Session
 		new File @socket, name, content
 
 	compile: (name, description) ->
-		@socket.emit 'compile',
+		@socket.send 'compile',
 			name:        name
 			description: description
 
@@ -32,7 +25,7 @@ class Session
 		handler = (data) ->
 			promise.notify data.progress
 
-		@socket.once 'compiled', (data) ->
+		@socket.send 'compiled', (data) ->
 			@socket.removeListener 'progress', handler
 			
 			if data.id
@@ -46,9 +39,7 @@ class Session
 class Cloupp
 	@createSession: (token) ->
 		promise = new $.Deferred
-
-		socket = io.connect SOCKET_IO_EP,
-			resource: SOCKET_IO_RES
+		socket  = Primus.connect URL
 
 		disconnectHandler = () ->
 			promise.reject()
@@ -56,12 +47,11 @@ class Cloupp
 		socket.once 'connect', () ->
 			socket.removeListener 'disconnect', disconnectHandler
 
-			socket.emit 'initialize', { token: token }
+			socket.send 'initialize', { token: token }
 			socket.once 'initialized', () ->
 				promise.resolve new Session socket
 
 		socket.once 'disconnect', disconnectHandler
-
 		promise.promise()
 
 module.exports = Cloupp
