@@ -1,4 +1,4 @@
-URL = "https://warm-garden-2837.herokuapp.com:443/v1/socket"
+URL = "https://warm-garden-2837.herokuapp.com"
 
 class File
 	constructor: (@socket, @name, content) ->
@@ -39,7 +39,8 @@ class Session
 class Cloupp
 	@createSession: (token) ->
 		promise = new $.Deferred
-		socket  = Primus.connect URL
+		socket  = Primus.connect URL,
+			pathname: 'v1/socket'
 
 		disconnectHandler = () ->
 			promise.reject()
@@ -47,9 +48,10 @@ class Cloupp
 		socket.once 'open', () ->
 			socket.removeListener 'disconnection', disconnectHandler
 
-			socket.send 'initialize', { token: token }
-			socket.once 'initialized', () ->
-				promise.resolve new Session socket
+			channel = socket.channel 'api'
+			channel.send 'initialize', { token: token }
+			channel.once 'initialized', () ->
+				promise.resolve new Session channel
 
 		socket.once 'disconnection', disconnectHandler
 		promise.promise()
