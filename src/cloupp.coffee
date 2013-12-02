@@ -25,7 +25,7 @@ class Session
 		handler = (data) ->
 			promise.notify data.progress
 
-		@socket.send 'compiled', (data) ->
+		@socket.on 'compiled', (data) ->
 			@socket.removeListener 'progress', handler
 			
 			if data.id
