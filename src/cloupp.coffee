@@ -44,14 +44,14 @@ class Cloupp
 		disconnectHandler = () ->
 			promise.reject()
 
-		socket.once 'connect', () ->
-			socket.removeListener 'disconnect', disconnectHandler
+		socket.once 'open', () ->
+			socket.removeListener 'disconnection', disconnectHandler
 
 			socket.send 'initialize', { token: token }
 			socket.once 'initialized', () ->
 				promise.resolve new Session socket
 
-		socket.once 'disconnect', disconnectHandler
+		socket.once 'disconnection', disconnectHandler
 		promise.promise()
 
 module.exports = Cloupp
