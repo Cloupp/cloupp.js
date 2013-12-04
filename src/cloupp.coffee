@@ -40,7 +40,8 @@ class Cloupp
 	@createSession: (token) ->
 		promise = new $.Deferred
 		socket  = Primus.connect URL,
-			pathname: 'v1/socket'
+			pathname:   'v1/socket'
+			websockets: false
 
 		disconnectHandler = () ->
 			promise.reject()
